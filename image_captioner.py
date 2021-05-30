@@ -72,25 +72,28 @@ def write_centred_text(image, image_dimensions: Position, text: str, size_fracti
     )
 
 
-def generate_captioned_image(input_path: str, output_path: str, top_text: str, bottom_text: str, uppercase: bool = True):
+def add_captions_to_image(image, top_text: str, bottom_text: str, uppercase: bool = True):
     if uppercase:
         top_text = top_text.upper()
         bottom_text = bottom_text.upper()
-    
+
     top_text = "\n".join(textwrap.wrap(top_text, 30))
     bottom_text = "\n".join(textwrap.wrap(bottom_text, 30))
 
+    image_dimensions = image.size
+    drawing_image = ImageDraw.Draw(image)
+
+    write_centred_text(drawing_image, image_dimensions, top_text, 0.8, False)
+    write_centred_text(drawing_image, image_dimensions, bottom_text, 0.8, True)
+
+
+def generate_captioned_image_from_disk(input_path: str, output_path: str, top_text: str, bottom_text: str, uppercase: bool = True):
     original_image = Image.open(input_path)
-    image_dimensions = original_image.size
-    image = ImageDraw.Draw(original_image)
-
-    write_centred_text(image, image_dimensions, top_text, 0.8, False)
-    write_centred_text(image, image_dimensions, bottom_text, 0.8, True)
-
+    add_captions_to_image(original_image, top_text, bottom_text, uppercase)
     original_image.save(output_path)
 
 
 if __name__ == "__main__":
-    generate_captioned_image("testsrc.png", "captioned.png", "you and me", "but unironically", False)
+    generate_captioned_image_from_disk("testsrc.png", "captioned.png", "you and me", "but unironically", False)
     # generate_captioned_image("testsrc.png", "captioned.png", "when cereal", "no haves milk")
     
