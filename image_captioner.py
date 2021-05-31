@@ -77,14 +77,16 @@ def add_captions_to_image(image, top_text: str, bottom_text: str, uppercase: boo
         top_text = top_text.upper()
         bottom_text = bottom_text.upper()
 
-    top_text = "\n".join(textwrap.wrap(top_text, 30))
-    bottom_text = "\n".join(textwrap.wrap(bottom_text, 30))
+    top_text = "\n".join(textwrap.wrap(top_text, 40))
+    bottom_text = "\n".join(textwrap.wrap(bottom_text, 40))
 
     image_dimensions = image.size
     drawing_image = ImageDraw.Draw(image)
 
-    write_centred_text(drawing_image, image_dimensions, top_text, 0.8, False)
-    write_centred_text(drawing_image, image_dimensions, bottom_text, 0.8, True)
+    if top_text.strip() != "":
+        write_centred_text(drawing_image, image_dimensions, top_text, 0.8, False)
+    if bottom_text.strip() != "":
+        write_centred_text(drawing_image, image_dimensions, bottom_text, 0.8, True)
 
 
 def generate_captioned_image_from_disk(input_path: str, output_path: str, top_text: str, bottom_text: str, uppercase: bool = True):

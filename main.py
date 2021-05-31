@@ -1,7 +1,7 @@
 import io
 import os
 import discord
-import requests  # not good
+import requests
 from discord.ext import commands
 from PIL import Image
 
@@ -42,11 +42,15 @@ async def reverse(ctx, *, something: str):
 
 @bot.command()
 async def image(ctx, top_text: str, bottom_text: str):
+    print(repr(top_text), repr(bottom_text))
+
     attachments = ctx.message.attachments
     if not attachments:
         return
     
     url = attachments[0].url
+
+    # bad because blocking but ehhhhh
     image = Image.open(requests.get(url, stream=True).raw)
     
     captioner.add_captions_to_image(image, top_text, bottom_text)
